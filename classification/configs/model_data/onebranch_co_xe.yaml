@@ -1,0 +1,5 @@
+# @package _global_
+defaults:
+  - override /data: co_xe
+
+model_type: onebranch

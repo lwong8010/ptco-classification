@@ -1,0 +1,7 @@
+# @package _global_
+hydra:
+  mode: MULTIRUN
+  sweeper:
+    params:
+      model_type: onebranch
+      data: pt_xanes,pt_exafs,co_xanes,co_exafs,pt_xe,co_xe,ptco_xx,ptco_ee,ptco_xxee,ptco_xexe

@@ -1,0 +1,5 @@
+# @package _global_
+defaults:
+  - override /data: ptco_xx
+
+model_type: onebranch

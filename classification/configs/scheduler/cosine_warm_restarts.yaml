@@ -1,0 +1,4 @@
+name: cosine_warm_restarts
+T_0: 10            # first restart interval in epochs
+T_mult: 2          # multiply interval after each restart
+eta_min: 1e-6       # min LR

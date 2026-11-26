@@ -1,0 +1,7 @@
+name: onecycle_cos
+max_lr: 0.000270407
+steps_per_epoch: null  # adjust to your dataloader length
+pct_start: 0.348383
+div_factor: 25.0
+final_div_factor: 1e4
+early_stop: true

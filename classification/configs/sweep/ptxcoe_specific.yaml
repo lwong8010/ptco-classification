@@ -1,0 +1,6 @@
+# @package _global_
+hydra:
+  mode: MULTIRUN
+  sweeper:
+    params:
+      "+experiment": "onebranch_ptxcoe,twobranch_ptxcoetb,twobranch_gf_ptxcoetb"

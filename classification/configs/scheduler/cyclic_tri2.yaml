@@ -1,0 +1,4 @@
+name: cyclic_tri2
+base_lr: 1e-5
+max_lr: 1e-3
+step_size_up: 200   # number of steps to reach max_lr

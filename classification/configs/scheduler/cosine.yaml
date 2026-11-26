@@ -1,0 +1,4 @@
+name: cosine
+T_max: 50
+eta_min: 1e-6
+early_stop: false

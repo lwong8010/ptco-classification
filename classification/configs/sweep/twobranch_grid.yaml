@@ -1,0 +1,7 @@
+# @package _global_
+hydra:
+  mode: MULTIRUN
+  sweeper:
+    params:
+      model_type: twobranch, twobranch_gf
+      data: pt_xe_tb, co_xe_tb, ptco_xx_tb, ptco_ee_tb, ptco_xexe_tb, ptco_xxee_tb

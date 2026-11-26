@@ -1,0 +1,10 @@
+# Run outputs
+outputs/
+multirun/
+lightning_logs/
+wandb/
+wandb_logs/
+
+# Python
+__pycache__/
+*.pyc

@@ -1,0 +1,5 @@
+# @package _global_
+defaults:
+  - override /data: co_xe_tb
+
+model_type: twobranch

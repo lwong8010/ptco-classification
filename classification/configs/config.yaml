@@ -1,0 +1,100 @@
+defaults:
+  - _self_
+  - model: default
+  - data: ptco_xxee_tb
+  - optim: adamw
+  - scheduler: onecycle_cos
+  - trainer: default
+  - logging: wandb
+  - override hydra/sweeper: basic
+  # Optuna sweeper (for the commented hyperparameter block at the bottom):
+  # - override hydra/sweeper: optuna
+  # - override hydra/sweeper/sampler: tpe
+
+model_type: twobranch_gf # can be onebranch, twobranch, twobranch_gf, twobranch_baseline
+
+# Global seed for model init + dataloader shuffling/workers (pl.seed_everything).
+# Independent of data.seed below, which fixes the train/val/test split.
+train_seed: 42
+
+data:
+  seed: 135
+  batch_size: 64
+  num_workers: 4
+  train_frac: 0.8
+  val_frac: 0.10
+  test_frac: 0.10
+  set_data_direct: false
+  train_dataset_path: train_ptco_xxee_tb.pt
+  val_dataset_path: val_ptco_xxee_tb.pt
+  test_dataset_path: test_ptco_xxee_tb.pt
+
+loss:
+  temperature: 0.1
+  lam_max: 0.3
+  lam_warmup_epochs: 10
+  use_pair_weights: true
+  pw_random_to_layered: 2.0    # ← added, default matches your original matrix
+  pw_layered_to_random: 2.0    # ← added, default matches your original matrix
+  pair_weights:            # 3x3 — upweights random<->layered confusion
+    - [1.0, 2.0, 1.0]
+    - [2.0, 1.0, 1.0]
+    - [1.0, 1.0, 1.0]
+
+hydra:
+  sweeper:
+    # Architecture x dataset comparison, 10 train_seeds per case
+    # (22 cases x 10 seeds = 220 runs; run with `python train.py -m`).
+    # Each configs/model_data/<model_type>_<data>.yaml sets model_type and
+    # overrides the data group, so onebranch only sees the averaged datasets
+    # and twobranch/twobranch_gf only the _tb ones. data.seed (split) stays
+    # fixed, so seeds differ only in init / batch order / dropout.
+    # Early stopping comes from scheduler/onecycle_cos.yaml (early_stop: true).
+    params:
+      +model_data: >-
+        onebranch_co_xanes, onebranch_pt_xanes,
+        onebranch_co_exafs, onebranch_pt_exafs,
+        onebranch_co_xe, onebranch_pt_xe,
+        onebranch_ptco_xx, onebranch_ptco_ee,
+        onebranch_ptco_xxee, onebranch_ptco_xexe,
+        twobranch_co_xe_tb, twobranch_pt_xe_tb,
+        twobranch_ptco_xx_tb, twobranch_ptco_ee_tb,
+        twobranch_ptco_xexe_tb, twobranch_ptco_xxee_tb,
+        twobranch_gf_co_xe_tb, twobranch_gf_pt_xe_tb,
+        twobranch_gf_ptco_xx_tb, twobranch_gf_ptco_ee_tb,
+        twobranch_gf_ptco_xexe_tb, twobranch_gf_ptco_xxee_tb
+      train_seed: range(1, 11)
+
+# --- previous Optuna hyperparameter sweep (restore by swapping the block above
+# --- and the defaults to `override hydra/sweeper: optuna` + `sampler: tpe`) ---
+# hydra:
+#   sweeper:
+#     # Optuna TPE hyperparameter optimization.
+#     # Same search space / sampler / budget as multirun/2026-02-25/16-06-02
+#     # (which optimized model_type=onebranch, data=co_xanes); here it runs
+#     # against model_type=twobranch_gf, data=ptco_xxee_tb.
+#     direction: maximize
+#     study_name: opt_hyperparameters
+#     storage: sqlite:///multirun/optuna_${now:%Y%m%d}.db
+#     n_trials: 100
+#     n_jobs: 2
+#     params:
+#       optim.lr: tag(log, interval(1e-5, 1e-3))
+#       optim.weight_decay: tag(log, interval(1e-6, 1e-2))
+#       model.dropout: interval(0.0, 0.5)
+#       model.branch_hidden: choice(64, 128, 256, 512)
+#       scheduler.max_lr: tag(log, interval(1e-5, 5e-4))
+#       scheduler.pct_start: interval(0.1, 0.5)
+#       data.batch_size: choice(4, 8, 16, 32, 64)
+
+# --- previous seed-reproducibility sweep (restore by swapping the block above
+# --- and setting `override hydra/sweeper/sampler: grid`) ---
+# hydra:
+#   sweeper:
+#     direction: maximize
+#     study_name: seed_reproducibility
+#     storage: sqlite:///multirun/seed_reproducibility_${now:%Y%m%d}.db
+#     n_trials: 10
+#     n_jobs: 2
+#     params:
+#       train_seed: choice(1,2,3,...,50)

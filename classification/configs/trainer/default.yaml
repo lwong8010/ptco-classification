@@ -1,0 +1,4 @@
+max_epochs: 1000
+accelerator: auto
+devices: 1
+log_every_n_steps: 10

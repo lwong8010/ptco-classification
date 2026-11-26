@@ -1,0 +1,5 @@
+# @package _global_
+defaults:
+  - override /data: ptx_coe
+
+model_type: onebranch

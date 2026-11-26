@@ -1,0 +1,21 @@
+# -------------------------
+# Common parameters
+# -------------------------
+num_classes: 3
+branch_channels: 128
+branch_hidden: 256
+head_hidden: 128
+dropout: 0.35
+
+# -------------------------
+# Two-branch specific
+# -------------------------
+xanes_length: 256
+exafs_length: 256
+proj_hidden: 256
+proj_out: 128
+
+# -------------------------
+# One-branch specific
+# -------------------------
+input_length: 256

@@ -1,0 +1,5 @@
+# @package _global_
+defaults:
+  - override /data: ptco_xx_tb
+
+model_type: twobranch

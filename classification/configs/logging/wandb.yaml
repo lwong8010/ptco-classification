@@ -1,0 +1,5 @@
+use_wandb: false
+project: spectra_classification
+entity: your-wandb-entity  # replace with your W&B username or team
+save_dir: ./wandb_logs
+tags: []

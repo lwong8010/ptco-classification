@@ -1,0 +1,5 @@
+# @package _global_
+defaults:
+  - override /data: pt_xanes
+
+model_type: onebranch
