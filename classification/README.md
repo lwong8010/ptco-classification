@@ -27,6 +27,7 @@ Tested with Python 3.11 on Linux with CUDA 12.8.
 ```bash
 conda create -n ptco-class python=3.11
 conda activate ptco-class
+cd classification
 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu128
 ```
 
@@ -37,7 +38,7 @@ available. `single_test.py` needs a CUDA GPU.
 ## Data
 
 The datasets are in `datasets/`. Dataset paths in the configs are resolved inside
-`datasets/`, so run all commands from the repository root.
+`datasets/`, so run all commands from inside `classification/`.
 
 Each file is a tuple of tensors saved with `torch.save`:
 
